@@ -43,18 +43,21 @@ type Source struct {
 	devices map[string]*ttnsdk.Device
 }
 
-// NewSource creates a new TTNv2 Source.
-func NewSource(ctx context.Context, flags *pflag.FlagSet) (source.Source, error) {
+func newSource(ctx context.Context, flags *pflag.FlagSet) (*Source, error) {
 	config, err := getConfig(ctx, flags)
 	if err != nil {
 		return nil, err
 	}
-
 	return &Source{
 		ctx:     ctx,
 		config:  config,
 		devices: make(map[string]*ttnsdk.Device),
 	}, nil
+}
+
+// NewSource creates a new TTNv2 Source.
+func NewSource(ctx context.Context, flags *pflag.FlagSet) (source.Source, error) {
+	return newSource(ctx, flags)
 }
 
 func (s *Source) getDeviceManager(appID string) (ttnsdk.DeviceManager, error) {
