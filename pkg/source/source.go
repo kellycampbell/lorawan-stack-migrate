@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"go.thethings.network/lorawan-stack/v3/pkg/errors"
 	"go.thethings.network/lorawan-stack/v3/pkg/ttnpb"
@@ -44,6 +45,8 @@ type Registration struct {
 
 	Create  CreateSource
 	FlagSet *pflag.FlagSet
+
+	Commands []*cobra.Command
 }
 
 var (
@@ -87,6 +90,26 @@ func FlagSet() *pflag.FlagSet {
 	}
 	flags.String("source", "", fmt.Sprintf("source (%s)", strings.Join(names, "|")))
 	return flags
+}
+
+// Commands returns commands registered by configured sources.
+func Commands() []*cobra.Command {
+	cmds := []*cobra.Command{}
+	for _, s := range registeredSources {
+		if s.Commands != nil {
+			sourceCmd := &cobra.Command{
+				Use:   s.Name,
+				Short: s.Description,
+			}
+			for _, c := range s.Commands {
+				c.Flags().AddFlagSet(s.FlagSet)
+			}
+			sourceCmd.AddCommand(s.Commands...)
+			cmds = append(cmds, sourceCmd)
+		}
+	}
+
+	return cmds
 }
 
 // Sources returns a map of registered Sources and their descriptions.

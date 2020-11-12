@@ -23,6 +23,11 @@ import (
 	"go.thethings.network/lorawan-stack/v3/pkg/rpcmiddleware/rpclog"
 )
 
+// Context returns the command context.
+func Context() context.Context {
+	return ctx
+}
+
 var (
 	logger  *log.Logger
 	ctx     context.Context
@@ -55,6 +60,11 @@ func Execute() int {
 		return 1
 	}
 	return 0
+}
+
+// AddCommand is used for sources to register their custom commands.
+func AddCommand(cmds ...*cobra.Command) {
+	rootCmd.AddCommand(cmds...)
 }
 
 func init() {
