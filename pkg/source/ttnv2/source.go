@@ -87,7 +87,6 @@ func (s *Source) ExportDevice(devID string) (*ttnpb.EndDevice, error) {
 
 	v3dev := &ttnpb.EndDevice{}
 	v3dev.DeviceID = dev.DevID
-	v3dev.ApplicationID = s.config.appID
 
 	v3dev.Name = dev.DevID
 	v3dev.Description = dev.Description

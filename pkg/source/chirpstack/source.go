@@ -153,7 +153,6 @@ func (p *Source) ExportDevice(devEui string) (*ttnpb.EndDevice, error) {
 		return nil, errInvalidDevEUI.WithAttributes("dev_eui", devEui).WithCause(err)
 	}
 	dev.EndDeviceIdentifiers.JoinEUI = p.joinEUI
-	dev.ApplicationIdentifiers.ApplicationID = fmt.Sprintf("chirpstack-%d", csdev.ApplicationId)
 	dev.EndDeviceIdentifiers.DeviceID = "eui-" + devEui
 
 	// Information
